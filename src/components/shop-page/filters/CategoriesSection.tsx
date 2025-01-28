@@ -1,46 +1,39 @@
-import Link from "next/link";
 import React from "react";
+import { useRouter } from "next/router";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-type Category = {
-  title: string;
-  slug: string;
+type CategorySectionProps = {
+  onCategorySelect: (category: string) => void;
 };
 
-const categoriesData: Category[] = [
-  {
-    title: "T-shirts",
-    slug: "/shop?category=t-shirts",
-  },
-  {
-    title: "Shorts",
-    slug: "/shop?category=shorts",
-  },
-  {
-    title: "Shirts",
-    slug: "/shop?category=shirts",
-  },
-  {
-    title: "Hoodie",
-    slug: "/shop?category=hoodie",
-  },
-  {
-    title: "Jeans",
-    slug: "/shop?category=jeans",
-  },
-];
+const CategoriesSection = ({ onCategorySelect }: CategorySectionProps) => {
+  const router = useRouter();
+  const currentCategory = router.query.category as string;
 
-const CategoriesSection = () => {
+  const categories = [
+    { title: "T-shirts", slug: "t-shirts" },
+    { title: "Shorts", slug: "shorts" },
+    { title: "Shirts", slug: "shirts" },
+    { title: "Hoodie", slug: "hoodie" },
+    { title: "Jeans", slug: "jeans" },
+  ];
+
   return (
-    <div className="flex flex-col space-y-0.5 text-black/60">
-      {categoriesData.map((category, idx) => (
-        <Link
-          key={idx}
-          href={category.slug}
-          className="flex items-center justify-between py-2"
+    <div className="flex flex-col space-y-2">
+      <h3 className="font-medium text-sm mb-2">Categories</h3>
+      {categories.map((category) => (
+        <button
+          key={category.slug}
+          onClick={() => onCategorySelect(category.slug)}
+          className={`flex items-center justify-between py-2 transition-colors ${
+            currentCategory === category.slug
+              ? "text-blue-600"
+              : "text-black/60 hover:text-black"
+          }`}
         >
-          {category.title} <MdKeyboardArrowRight />
-        </Link>
+          {category.title}
+          <MdKeyboardArrowRight />
+        </button>
       ))}
     </div>
   );
