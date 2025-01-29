@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import CategoriesSection from "@/components/shop-page/filters/CategoriesSection";
