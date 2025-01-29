@@ -6,7 +6,7 @@ const DeliveryFAQ = () => {
       {/* Hero Section */}
       <section className="py-24 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center">
         <h1 className="text-5xl font-bold leading-tight">Delivery FAQ</h1>
-        <p className="mt-4 text-lg font-medium">All your shipping and delivery questions answered here!</p>
+        <p className="mt-4 text-lg font-medium">All your shippings and delivery questions answered here!</p>
       </section>
 
       {/* FAQ Content */}
@@ -24,7 +24,7 @@ const DeliveryFAQ = () => {
 
             {/* FAQ Item 2 */}
             <div className="bg-white shadow-lg rounded-lg p-6">
-              <h4 className="text-xl font-semibold text-gray-900">2. How much does shipping cost?</h4>
+              <h4 className="text-xl font-semibold text-gray-900">2. How much does shipping costs?</h4>
               <p className="mt-2 text-gray-600">
                 Shipping costs depend on the selected shipping method, destination, and the weight of the items. You can view the exact shipping cost during checkout.
               </p>
