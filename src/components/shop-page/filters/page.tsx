@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import CategoriesSection from "@/components/shop-page/filters/CategoriesSection";
 import ColorsSection from "@/components/shop-page/filters/ColorsSection";
 import DressStyleSection from "@/components/shop-page/filters/DressStyleSection";
@@ -9,23 +9,33 @@ import PriceSection from "@/components/shop-page/filters/PriceSection";
 import SizeSection from "@/components/shop-page/filters/SizeSection";
 import { Button } from "@/components/ui/button";
 
+interface FilterState {
+  category: string;
+  price: {
+    min: number;
+    max: number;
+  };
+  colors: string[];
+  size: string[];
+  style: string[];
+}
+
 const Filters = () => {
   const router = useRouter();
-  const [selectedFilters, setSelectedFilters] = useState<{
-    category: string;
-    price: { min: number; max: number };
-    colors: string[];
-    size: string[];
-    style: string[];
-  }>({
-    category: "",
-    price: { min: 0, max: 200 },
-    colors: [],
-    size: [],
-    style: []
+  const searchParams = useSearchParams();
+
+  // Initialize state from URL parameters
+  const [selectedFilters, setSelectedFilters] = useState<FilterState>({
+    category: searchParams.get('category') || "",
+    price: {
+      min: Number(searchParams.get('minPrice')) || 0,
+      max: Number(searchParams.get('maxPrice')) || 200
+    },
+    colors: searchParams.get('colors')?.split(',').filter(Boolean) || [],
+    size: searchParams.get('sizes')?.split(',').filter(Boolean) || [],
+    style: searchParams.get('styles')?.split(',').filter(Boolean) || []
   });
 
-  // Handler for category changes
   const handleCategoryChange = (category: string) => {
     setSelectedFilters(prev => ({
       ...prev,
@@ -33,7 +43,6 @@ const Filters = () => {
     }));
   };
 
-  // Handler for price changes
   const handlePriceChange = (min: number, max: number) => {
     setSelectedFilters(prev => ({
       ...prev,
@@ -41,7 +50,6 @@ const Filters = () => {
     }));
   };
 
-  // Handler for color changes
   const handleColorChange = (colors: string[]) => {
     setSelectedFilters(prev => ({
       ...prev,
@@ -49,7 +57,6 @@ const Filters = () => {
     }));
   };
 
-  // Handler for size changes
   const handleSizeChange = (sizes: string[]) => {
     setSelectedFilters(prev => ({
       ...prev,
@@ -57,7 +64,6 @@ const Filters = () => {
     }));
   };
 
-  // Handler for style changes
   const handleStyleChange = (styles: string[]) => {
     setSelectedFilters(prev => ({
       ...prev,
@@ -65,24 +71,50 @@ const Filters = () => {
     }));
   };
 
-  // Apply filters handler
   const handleApplyFilters = () => {
-    // Construct query parameters
-    const query = {
-      ...router.query,
-      ...(selectedFilters.category && { category: selectedFilters.category }),
-      ...(selectedFilters.colors.length > 0 && { colors: selectedFilters.colors.join(',') }),
-      ...(selectedFilters.size.length > 0 && { sizes: selectedFilters.size.join(',') }),
-      ...(selectedFilters.style.length > 0 && { styles: selectedFilters.style.join(',') }),
-      minPrice: selectedFilters.price.min.toString(),
-      maxPrice: selectedFilters.price.max.toString()
-    };
+    // Create new URLSearchParams instance
+    const params = new URLSearchParams(searchParams.toString());
 
-    // Update URL with selected filters
-    router.push({
-      pathname: router.pathname,
-      query
-    }, undefined, { shallow: true });
+    // Update or remove category
+    if (selectedFilters.category) {
+      params.set('category', selectedFilters.category);
+    } else {
+      params.delete('category');
+    }
+
+    // Update or remove colors
+    if (selectedFilters.colors.length > 0) {
+      params.set('colors', selectedFilters.colors.join(','));
+    } else {
+      params.delete('colors');
+    }
+
+    // Update or remove sizes
+    if (selectedFilters.size.length > 0) {
+      params.set('sizes', selectedFilters.size.join(','));
+    } else {
+      params.delete('sizes');
+    }
+
+    // Update or remove styles
+    if (selectedFilters.style.length > 0) {
+      params.set('styles', selectedFilters.style.join(','));
+    } else {
+      params.delete('styles');
+    }
+
+    // Always include price range
+    params.set('minPrice', selectedFilters.price.min.toString());
+    params.set('maxPrice', selectedFilters.price.max.toString());
+
+    // Preserve the current page if it exists
+    const page = searchParams.get('page');
+    if (page) {
+      params.set('page', page);
+    }
+
+    // Navigate with the new params
+    router.push(`?${params.toString()}`);
   };
 
   return (
