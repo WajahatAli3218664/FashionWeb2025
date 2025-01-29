@@ -9,8 +9,17 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
-const SizeSection = () => {
+interface SizeSectionProps {
+  onChange: (sizes: string[]) => void;
+}
+
+const SizeSection: React.FC<SizeSectionProps> = ({ onChange }) => {
   const [selected, setSelected] = useState<string>("Large");
+
+  const handleSizeClick = (size: string) => {
+    setSelected(size);
+    onChange([size]);
+  };
 
   return (
     <Accordion type="single" collapsible defaultValue="filter-size">
@@ -38,7 +47,7 @@ const SizeSection = () => {
                   "bg-[#F0F0F0] m-1 flex items-center justify-center px-5 py-2.5 text-sm rounded-full max-h-[39px]",
                   selected === size && "bg-black font-medium text-white",
                 ])}
-                onClick={() => setSelected(size)}
+                onClick={() => handleSizeClick(size)}
               >
                 {size}
               </button>

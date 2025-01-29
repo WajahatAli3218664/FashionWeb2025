@@ -7,7 +7,15 @@ import {
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 
-const PriceSection = () => {
+interface PriceSectionProps {
+  onChange: (min: number, max: number) => void;
+}
+
+const PriceSection: React.FC<PriceSectionProps> = ({ onChange }) => {
+  const handleSliderChange = (values: number[]) => {
+    onChange(values[0], values[1]);
+  };
+
   return (
     <Accordion type="single" collapsible defaultValue="filter-price">
       <AccordionItem value="filter-price" className="border-none">
@@ -21,6 +29,7 @@ const PriceSection = () => {
             max={250}
             step={1}
             label="$"
+            onValueChange={handleSliderChange}
           />
           <div className="mb-3" />
         </AccordionContent>

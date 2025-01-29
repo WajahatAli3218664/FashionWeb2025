@@ -1,38 +1,33 @@
 import React from "react";
-import { useRouter } from "next/router";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-type CategorySectionProps = {
-  onCategorySelect: (category: string) => void;
+type Category = {
+  title: string;
+  slug: string;
 };
 
-const CategoriesSection = ({ onCategorySelect }: CategorySectionProps) => {
-  const router = useRouter();
-  const currentCategory = router.query.category as string;
+const categoriesData: Category[] = [
+  { title: "T-shirts", slug: "t-shirts" },
+  { title: "Shorts", slug: "shorts" },
+  { title: "Shirts", slug: "shirts" },
+  { title: "Hoodie", slug: "hoodie" },
+  { title: "Jeans", slug: "jeans" },
+];
 
-  const categories = [
-    { title: "T-shirts", slug: "t-shirts" },
-    { title: "Shorts", slug: "shorts" },
-    { title: "Shirts", slug: "shirts" },
-    { title: "Hoodie", slug: "hoodie" },
-    { title: "Jeans", slug: "jeans" },
-  ];
+interface CategoriesSectionProps {
+  onCategorySelect: (category: string) => void;
+}
 
+const CategoriesSection: React.FC<CategoriesSectionProps> = ({ onCategorySelect }) => {
   return (
-    <div className="flex flex-col space-y-2">
-      <h3 className="font-medium text-sm mb-2">Categories</h3>
-      {categories.map((category) => (
+    <div className="flex flex-col space-y-0.5 text-black/60">
+      {categoriesData.map((category, idx) => (
         <button
-          key={category.slug}
+          key={idx}
           onClick={() => onCategorySelect(category.slug)}
-          className={`flex items-center justify-between py-2 transition-colors ${
-            currentCategory === category.slug
-              ? "text-blue-600"
-              : "text-black/60 hover:text-black"
-          }`}
+          className="flex items-center justify-between py-2"
         >
-          {category.title}
-          <MdKeyboardArrowRight />
+          {category.title} <MdKeyboardArrowRight />
         </button>
       ))}
     </div>

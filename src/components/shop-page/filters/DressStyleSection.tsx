@@ -14,25 +14,21 @@ type DressStyle = {
 };
 
 const dressStylesData: DressStyle[] = [
-  {
-    title: "Casual",
-    slug: "/shop?style=casual",
-  },
-  {
-    title: "Formal",
-    slug: "/shop?style=formal",
-  },
-  {
-    title: "Party",
-    slug: "/shop?style=party",
-  },
-  {
-    title: "Gym",
-    slug: "/shop?style=gym",
-  },
+  { title: "Casual", slug: "casual" },
+  { title: "Formal", slug: "formal" },
+  { title: "Party", slug: "party" },
+  { title: "Gym", slug: "gym" },
 ];
 
-const DressStyleSection = () => {
+interface DressStyleSectionProps {
+  onChange: (styles: string[]) => void;
+}
+
+const DressStyleSection: React.FC<DressStyleSectionProps> = ({ onChange }) => {
+  const handleStyleClick = (style: string) => {
+    onChange([style]);
+  };
+
   return (
     <Accordion type="single" collapsible defaultValue="filter-style">
       <AccordionItem value="filter-style" className="border-none">
@@ -42,13 +38,13 @@ const DressStyleSection = () => {
         <AccordionContent className="pt-4 pb-0">
           <div className="flex flex-col text-black/60 space-y-0.5">
             {dressStylesData.map((dStyle, idx) => (
-              <Link
+              <button
                 key={idx}
-                href={dStyle.slug}
+                onClick={() => handleStyleClick(dStyle.slug)}
                 className="flex items-center justify-between py-2"
               >
                 {dStyle.title} <MdKeyboardArrowRight />
-              </Link>
+              </button>
             ))}
           </div>
         </AccordionContent>

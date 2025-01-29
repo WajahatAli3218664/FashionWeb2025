@@ -10,8 +10,17 @@ import {
 import { IoMdCheckmark } from "react-icons/io";
 import { cn } from "@/lib/utils";
 
-const ColorsSection = () => {
+interface ColorsSectionProps {
+  onChange: (colors: string[]) => void;
+}
+
+const ColorsSection: React.FC<ColorsSectionProps> = ({ onChange }) => {
   const [selected, setSelected] = useState<string>("bg-green-600");
+
+  const handleColorClick = (color: string) => {
+    setSelected(color);
+    onChange([color]);
+  };
 
   return (
     <Accordion type="single" collapsible defaultValue="filter-colors">
@@ -40,7 +49,7 @@ const ColorsSection = () => {
                   color,
                   "rounded-full w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center border border-black/20",
                 ])}
-                onClick={() => setSelected(color)}
+                onClick={() => handleColorClick(color)}
               >
                 {selected === color && (
                   <IoMdCheckmark className="text-base text-white" />
