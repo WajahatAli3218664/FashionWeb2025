@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MobileFilters from "@/components/shop-page/filters/MobileFilters";
-import Filters from "@/components/shop-page/filters/page"; // Updated import
+import Filters from "@/components/shop-page/filters/page"; // Correct import
 import { FiSliders } from "react-icons/fi";
 import ProductCard from "@/components/common/ProductCard";
 import {
